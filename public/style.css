@@ -192,9 +192,7 @@ td:last-child, th:last-child { text-align: right; }
 .state-failed::before { background: var(--error); }
 .state-activating { color: var(--accent); }
 .state-activating::before { background: var(--accent); }
-.row-action { min-height: 2.3rem; font-size: .78rem; }
 .empty { padding: .9rem; color: var(--muted); }
-.feedback { min-height: 1.5rem; margin-top: .55rem; color: var(--muted); font-size: .84rem; }
 footer {
   display: flex;
   justify-content: space-between;
@@ -224,5 +222,4 @@ footer {
   .metric { padding-inline: .68rem; }
   th, td { padding-inline: .45rem; }
   .state { font-size: .72rem; }
-  .row-action { padding-inline: .38rem; }
 }

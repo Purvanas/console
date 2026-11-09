@@ -15,6 +15,5 @@ server.on("error", (error) => {
   process.exitCode = 1;
 });
 server.listen(config.port, "127.0.0.1", () => {
-  const label = config.mode === "demo" ? "démonstration" : "lecture seule";
-  console.log(`Console · ${label} · http://127.0.0.1:${config.port}`);
+  console.log(`Console · lecture seule · http://127.0.0.1:${config.port}`);
 });

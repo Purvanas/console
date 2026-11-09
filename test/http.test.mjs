@@ -4,8 +4,10 @@ import { request } from "node:http";
 import { test } from "node:test";
 import { createConsoleServer } from "../lib/http.mjs";
 
+const fixture = { mode: "local", uptime: 120, services: [] };
+
 async function start(t, options) {
-  const server = createConsoleServer(options);
+  const server = createConsoleServer({ collect: () => fixture, ...options });
   t.after(() => server.close());
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -30,14 +32,15 @@ test("l’accueil et les seuls fichiers publics sont servis avec les protections
   const home = await call(port, "/");
   assert.equal(home.status, 200);
   assert.match(home.body, /Vue d’ensemble/);
+  assert.match(home.body, /Lecture seule/);
   assert.match(home.headers["content-security-policy"], /frame-ancestors 'none'/);
   assert.equal(home.headers["x-content-type-options"], "nosniff");
   assert.equal(home.headers["cache-control"], "no-store");
 
-  for (const path of ["/app.js", "/http-entry.js", "/style.css", "/favicon.svg"]) {
+  for (const path of ["/app.js", "/style.css", "/favicon.svg"]) {
     assert.equal((await call(port, path)).status, 200);
   }
-  for (const path of ["/.env", "/package.json", "/lib/config.mjs", "/%2e%2e/server.mjs", "//example.org"]) {
+  for (const path of ["/.env", "/package.json", "/lib/config.mjs", "/%2e%2e/server.mjs", "//example.org", "/demo-entry.js", "/demo-data.js"]) {
     assert.equal((await call(port, path)).status, 404);
   }
   const head = await call(port, "/", { method: "HEAD" });
@@ -65,7 +68,7 @@ test("un hôte détourné et les requêtes d’un autre site sont refusés", asy
 });
 
 test("le backend reste en lecture seule et les routes sensibles sont absentes", async (t) => {
-  const port = await start(t);
+  const port = await start(t, process.platform === "linux" ? { collect: undefined } : {});
   const post = await call(port, "/api/snapshot", { method: "POST" });
   assert.equal(post.status, 405);
   assert.equal(post.headers.allow, "GET, HEAD");
@@ -73,17 +76,18 @@ test("le backend reste en lecture seule et les routes sensibles sont absentes", 
   assert.equal((await call(port, "/api/files")).status, 404);
 
   const result = await call(port, "/api/snapshot");
+  assert.equal(result.status, 200);
   const data = JSON.parse(result.body);
-  assert.equal(data.mode, "demo");
-  assert.equal(data.services.length, 3);
-  assert.ok(data.services.every(({ name }) => /^example-/.test(name)));
+  assert.equal(data.mode, "local");
+  assert.ok(Number.isFinite(data.uptime));
+  assert.deepEqual(data.services, []);
 });
 
 test("les demandes simultanées partagent une seule collecte", async (t) => {
   let calls = 0;
   const port = await start(t, { collect: () => {
     calls += 1;
-    return { mode: "demo" };
+    return fixture;
   } });
   const results = await Promise.all(Array.from({ length: 5 }, () => call(port, "/api/snapshot")));
   assert.ok(results.every(({ status }) => status === 200));
@@ -97,7 +101,7 @@ test("une collecte en échec ne divulgue pas l’erreur et peut être relancée"
       failOnce = false;
       throw new Error("détail interne");
     }
-    return { mode: "demo" };
+    return fixture;
   } });
   const failed = await call(port, "/api/snapshot");
   assert.equal(failed.status, 503);

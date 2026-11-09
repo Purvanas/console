@@ -8,7 +8,7 @@
   <title>Console · Observatoire système</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css">
-  <script src="./http-entry.js" type="module"></script>
+  <script src="./app.js" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#content">Aller au contenu</a>
@@ -32,11 +32,11 @@
           <h1>Vue d’ensemble</h1>
           <p class="intro">Suivez les ressources de la machine et l’état de ses services au même endroit.</p>
         </div>
-        <span class="mode-badge" id="mode-badge">Connexion…</span>
+        <span class="mode-badge">Lecture seule</span>
       </header>
 
       <div class="notice">
-        <div><strong id="mode-title">Chargement de Console</strong><p id="mode-description">Les données vont s’afficher ici.</p></div>
+        <div><strong>Observation locale</strong><p>Les données proviennent de la machine sur laquelle Console est lancée.</p></div>
         <button id="refresh" class="secondary-button" type="button">Actualiser</button>
       </div>
       <p id="network-state" class="error" role="status" hidden></p>
@@ -86,12 +86,11 @@
         </div>
         <div class="table-panel">
           <table>
-            <thead><tr><th scope="col">Service</th><th scope="col">État</th><th scope="col" id="action-heading" hidden>Action de démo</th></tr></thead>
+            <thead><tr><th scope="col">Service</th><th scope="col">État</th></tr></thead>
             <tbody id="service-rows"></tbody>
           </table>
           <p class="empty" id="service-empty">En attente des données.</p>
         </div>
-        <p id="demo-feedback" class="feedback" role="status"></p>
       </section>
 
       <footer>

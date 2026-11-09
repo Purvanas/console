@@ -2,14 +2,13 @@
   "name": "console-server",
   "version": "1.0.0",
   "private": true,
-  "description": "Tableau de bord local et démonstration autonome pour observer un serveur Linux",
+  "description": "Tableau de bord local en lecture seule pour observer un serveur Linux",
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "start": "node server.mjs",
-    "build:pages": "node scripts/build-pages.mjs",
     "test": "node --test"
   },
   "license": "MIT"
