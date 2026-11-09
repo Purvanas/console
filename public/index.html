@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Console, un tableau de bord local pour observer un serveur Linux.">
+  <title>Console · Observatoire système</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./http-entry.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Aller au contenu</a>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#content">
+        <span class="brand-icon" aria-hidden="true">›_</span>
+        <span><strong>Console</strong><small>Observatoire système</small></span>
+      </a>
+      <nav aria-label="Sections">
+        <a href="#overview"><span aria-hidden="true">01</span> Vue d’ensemble</a>
+        <a href="#services"><span aria-hidden="true">02</span> Services</a>
+      </nav>
+      <p class="sidebar-note"><span class="status-light" aria-hidden="true"></span> Accès local</p>
+    </aside>
+
+    <main id="content" class="content">
+      <header id="overview" class="page-heading">
+        <div>
+          <p class="eyebrow">Tableau de bord</p>
+          <h1>Vue d’ensemble</h1>
+          <p class="intro">Suivez les ressources de la machine et l’état de ses services au même endroit.</p>
+        </div>
+        <span class="mode-badge" id="mode-badge">Connexion…</span>
+      </header>
+
+      <div class="notice">
+        <div><strong id="mode-title">Chargement de Console</strong><p id="mode-description">Les données vont s’afficher ici.</p></div>
+        <button id="refresh" class="secondary-button" type="button">Actualiser</button>
+      </div>
+      <p id="network-state" class="error" role="status" hidden></p>
+      <noscript><p class="error">Activez JavaScript pour afficher le tableau de bord.</p></noscript>
+
+      <section class="metrics" aria-label="Ressources">
+        <article class="metric">
+          <h2>Processeur</h2>
+          <p class="metric-value" id="cpu-value">—</p>
+          <progress id="cpu-progress" max="100" aria-label="Utilisation du processeur"></progress>
+          <p class="metric-note">Charge mesurée</p>
+        </article>
+        <article class="metric">
+          <h2>Mémoire</h2>
+          <p class="metric-value" id="memory-value">—</p>
+          <progress id="memory-progress" max="100" aria-label="Utilisation de la mémoire"></progress>
+          <p class="metric-note" id="memory-note">Mémoire utilisée</p>
+        </article>
+        <article class="metric">
+          <h2>Stockage</h2>
+          <p class="metric-value" id="storage-value">—</p>
+          <progress id="storage-progress" max="100" aria-label="Utilisation du stockage"></progress>
+          <p class="metric-note" id="storage-note">Système de fichiers principal</p>
+        </article>
+        <article class="metric">
+          <h2>Disponibilité</h2>
+          <p class="metric-value" id="uptime-value">—</p>
+          <p class="metric-note uptime-note">Depuis le dernier démarrage</p>
+        </article>
+      </section>
+
+      <section id="services" class="services-section" aria-labelledby="services-heading">
+        <div class="services-heading">
+          <div>
+            <p class="eyebrow">Surveillance</p>
+            <h2 id="services-heading">Services</h2>
+            <p id="service-summary">En attente des données.</p>
+          </div>
+          <div class="filter">
+            <label for="service-filter">Filtrer par état</label>
+            <select id="service-filter">
+              <option value="all">Tous les états</option>
+              <option value="active">Actifs</option>
+              <option value="attention">À surveiller</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-panel">
+          <table>
+            <thead><tr><th scope="col">Service</th><th scope="col">État</th><th scope="col" id="action-heading" hidden>Action de démo</th></tr></thead>
+            <tbody id="service-rows"></tbody>
+          </table>
+          <p class="empty" id="service-empty">En attente des données.</p>
+        </div>
+        <p id="demo-feedback" class="feedback" role="status"></p>
+      </section>
+
+      <footer>
+        <span>Console · Édition publique</span>
+        <span id="last-sample">Dernière lecture —</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

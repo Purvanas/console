@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+*.local
+*.log
+*.pem
+*.key
+*.sqlite*
+*.bak
+*.zip
+*.tar*
+node_modules/
+coverage/
+dist-pages/
+data/
+config/
+.DS_Store
